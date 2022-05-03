@@ -19,6 +19,7 @@ apply from: "$rootDir/gradle/spock.gradle"
 apply plugin: "java"
 
 dependencies {
+  implementation 'software.aws.rds:aws-mysql-jdbc:1.0.0'
   implementation(project(":keiko-core"))
 
   implementation(project(":orca-core"))
@@ -33,7 +34,7 @@ dependencies {
   implementation("org.springframework:spring-tx")
   implementation("org.springframework.boot:spring-boot-autoconfigure")
   implementation("org.jooq:jooq")
-  implementation("org.liquibase:liquibase-core")
+  implementation 'org.liquibase:liquibase-core:4.3.5'
   implementation("com.zaxxer:HikariCP")
   implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
@@ -53,6 +54,7 @@ dependencies {
   testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
   testRuntimeOnly("org.junit.platform:junit-platform-launcher")
   testRuntimeOnly("org.junit.vintage:junit-vintage-engine")
+  implementation 'com.amazonaws:aws-java-sdk:1.12.128'
 }
 
 test {

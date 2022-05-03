@@ -19,6 +19,8 @@ import com.netflix.spinnaker.kork.sql.config.SqlProperties
 import javax.sql.DataSource
 import liquibase.integration.spring.SpringLiquibase
 import org.springframework.jdbc.datasource.SingleConnectionDataSource
+import java.sql.Connection
+import java.sql.DriverManager
 
 /**
  * Proxies Spring's Liquibase bean to allow multiple, independent Liquibase
@@ -46,14 +48,17 @@ class SpringLiquibaseProxy(
    * expects things to be done for cleanup purposes, etc.
    */
   override fun afterPropertiesSet() {
+    println("entre a afterproperties")
+    val ds : DataSource = getDataSource()
+    val con : Connection = DriverManager.getConnection(sqlProperties.migration.jdbcUrl, sqlProperties.migration.user, sqlProperties.migration.password)
     // First do the OSS migrations
     super.afterPropertiesSet()
-
     SpringLiquibase().apply {
       changeLog = "classpath:db/changelog-keiko.yml"
       dataSource = createDataSource()
       resourceLoader = this@SpringLiquibaseProxy.resourceLoader
     }.afterPropertiesSet()
+    println("pase apply")
 
     // Then if anything else has been defined, do that afterwards
     sqlProperties.migration.additionalChangeLogs
@@ -68,10 +73,14 @@ class SpringLiquibaseProxy(
       .forEach {
         it.afterPropertiesSet()
       }
+    println("sali de afterproperties")
   }
 
   private fun createDataSource(): DataSource =
     sqlProperties.migration.run {
+      println("password: $password")
+      println(user)
+//      println("jdbcUrl: $jdbcUrl")
       val ds = SingleConnectionDataSource(jdbcUrl, user, password, true)
       if (driver != null) {
         ds.setDriverClassName(driver)
