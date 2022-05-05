@@ -19,6 +19,10 @@ apply from: "$rootDir/gradle/spock.gradle"
 apply plugin: "java"
 
 dependencies {
+  implementation 'software.aws.rds:aws-mysql-jdbc:1.0.0'
+  implementation 'org.liquibase:liquibase-core:4.3.5'
+  implementation 'com.amazonaws:aws-java-sdk:1.12.128'
+
   implementation(project(":keiko-core"))
 
   implementation(project(":orca-core"))

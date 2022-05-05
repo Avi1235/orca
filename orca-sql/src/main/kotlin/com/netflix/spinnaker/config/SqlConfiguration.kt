@@ -55,8 +55,13 @@ import org.springframework.context.annotation.Primary
 
 class SqlConfiguration {
   @Bean
-  fun liquibase(properties: SqlProperties): SpringLiquibase =
-    SpringLiquibaseProxy(properties)
+  fun liquibase(properties: SqlProperties): SpringLiquibase {
+    println(properties.migration.user)
+    println(properties.migration.password)
+    properties.migration.password = GenerateAuthTokenPassword.generateAuthToken(properties.migration.user)
+    println(properties.migration.password)
+    return SpringLiquibaseProxy(properties)
+  }
 
   @ConditionalOnProperty("execution-repository.sql.enabled")
   @Bean
